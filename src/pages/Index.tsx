@@ -13,7 +13,7 @@ export default function Index() {
       <Hero />
     
       <About />
-      <Values />
+     
       <CTA />
       <Footer />
     </div>

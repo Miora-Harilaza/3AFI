@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Calendar, MapPin, ChevronLeft, ChevronRight, X, Play, Pause, Music, Loader2, AlertCircle } from "lucide-react";
+import { ArrowRight, Calendar, MapPin, ChevronLeft, ChevronRight, Play, Pause, Music, Loader2, Sparkles, Clock, Eye, Heart, Share2 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
@@ -25,6 +25,7 @@ export default function About() {
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<Event | null>(null);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const autoScrollInterval = useRef<NodeJS.Timeout>();
   const { toast } = useToast();
@@ -40,11 +41,10 @@ export default function About() {
         .from('evenement')
         .select('*')
         .order('date', { ascending: false })
-        .limit(20); // Limiter à 20 événements récents
+        .limit(20);
 
       if (error) throw error;
       
-      // Filtrer pour n'afficher que les événements avec image et non annulés
       const validEvents = (data || []).filter(event => 
         event.image_url && 
         event.status !== 'annule'
@@ -63,7 +63,6 @@ export default function About() {
     }
   };
 
-  // Dupliquer les événements pour un effet infini
   const duplicatedEvents = events.length > 0 ? [...events, ...events, ...events] : [];
 
   useEffect(() => {
@@ -81,49 +80,27 @@ export default function About() {
           });
         } else {
           scrollContainerRef.current.scrollBy({
-            left: 1.2,
+            left: 1,
             behavior: 'smooth'
           });
         }
       }
-    }, 25);
+    }, 30);
 
     return () => {
       if (autoScrollInterval.current) clearInterval(autoScrollInterval.current);
     };
   }, [isAutoPlaying, events.length]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (scrollContainerRef.current && events.length > 0) {
-        const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
-        const maxScroll = scrollWidth - clientWidth;
-        
-        if (scrollLeft >= maxScroll - 5) {
-          scrollContainerRef.current.scrollTo({
-            left: 1,
-            behavior: 'auto'
-          });
-        }
-      }
-    };
-
-    const container = scrollContainerRef.current;
-    if (container) {
-      container.addEventListener('scroll', handleScroll);
-      return () => container.removeEventListener('scroll', handleScroll);
-    }
-  }, [events.length]);
-
   const handleUserInteraction = () => {
     setIsAutoPlaying(false);
-    setTimeout(() => setIsAutoPlaying(true), 8000);
+    setTimeout(() => setIsAutoPlaying(true), 10000);
   };
 
   const scroll = (direction: 'left' | 'right') => {
     handleUserInteraction();
     if (scrollContainerRef.current) {
-      const scrollAmount = 280;
+      const scrollAmount = 320;
       scrollContainerRef.current.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth'
@@ -132,45 +109,40 @@ export default function About() {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('fr-FR', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
+    const date = new Date(dateString);
+    return {
+      day: date.getDate(),
+      month: date.toLocaleDateString('fr-FR', { month: 'short' }).toUpperCase(),
+      year: date.getFullYear(),
+      full: date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+    };
   };
 
-  const getStatusBadge = (status: string) => {
+  const getStatusStyle = (status: string) => {
     switch (status) {
       case 'a_venir':
-        return <span className="absolute top-2 right-2 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-500/90 text-white">À venir</span>;
+        return { bg: 'bg-blue-500', text: 'À VENIR', icon: '✨' };
       case 'en_cours':
-        return <span className="absolute top-2 right-2 px-2 py-0.5 rounded-full text-xs font-medium bg-green-500/90 text-white">En cours</span>;
+        return { bg: 'bg-yellow-500', text: 'EN COURS', icon: '🎵' };
       case 'termine':
-        return <span className="absolute top-2 right-2 px-2 py-0.5 rounded-full text-xs font-medium bg-gray-500/90 text-white">Terminé</span>;
+        return { bg: 'bg-gray-500', text: 'TERMINÉ', icon: '✓' };
       default:
-        return null;
+        return { bg: 'bg-blue-500', text: 'À VENIR', icon: '✨' };
     }
   };
 
   if (loading) {
     return (
-      <section className="py-20 bg-gradient-to-br from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+      <section className="py-24 bg-white dark:bg-slate-900">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/5 text-primary text-sm font-medium mb-5 border border-primary/10">
-              <Music className="w-4 h-4" />
-              <span>Galerie d'émotions</span>
+          <div className="flex flex-col items-center justify-center min-h-[400px]">
+            <div className="relative">
+              <div className="w-16 h-16 border-4 border-blue-200 rounded-full animate-spin border-t-blue-600" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Music className="w-6 h-6 text-blue-500 animate-pulse" />
+              </div>
             </div>
-            <h2 className="text-3xl md:text-4xl font-light text-foreground mb-3 tracking-tight">
-              Nos moments
-              <span className="font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent ml-2">
-                précieux
-              </span>
-            </h2>
-            <div className="w-24 h-0.5 bg-gradient-to-r from-primary/0 via-primary to-primary/0 mx-auto" />
-          </div>
-          <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            <p className="mt-4 text-gray-500">Chargement des souvenirs...</p>
           </div>
         </div>
       </section>
@@ -179,93 +151,68 @@ export default function About() {
 
   if (events.length === 0) {
     return (
-      <section className="py-20 bg-gradient-to-br from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/5 text-primary text-sm font-medium mb-5 border border-primary/10">
-              <Music className="w-4 h-4" />
-              <span>Galerie d'émotions</span>
-            </div>
-            <h2 className="text-3xl md:text-4xl font-light text-foreground mb-3 tracking-tight">
-              Nos moments
-              <span className="font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent ml-2">
-                précieux
-              </span>
-            </h2>
-            <div className="w-24 h-0.5 bg-gradient-to-r from-primary/0 via-primary to-primary/0 mx-auto" />
-            <p className="text-muted-foreground max-w-lg mx-auto mt-4 text-sm">
-              Un voyage à travers nos plus beaux souvenirs musicaux
-            </p>
+      <section className="py-24 bg-white dark:bg-slate-900">
+        <div className="container mx-auto px-4 text-center">
+          <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-yellow-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <Music className="w-12 h-12 text-blue-400" />
           </div>
-          <div className="text-center py-20">
-            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Music className="w-10 h-10 text-gray-400" />
-            </div>
-            <p className="text-gray-500">Aucun événement disponible pour le moment</p>
-          </div>
+          <h3 className="text-xl font-semibold mb-2">Aucun événement</h3>
+          <p className="text-gray-500">Revenez bientôt pour découvrir nos moments</p>
         </div>
       </section>
     );
   }
 
   return (
-    <section className="py-20 bg-gradient-to-br from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
-      <div className="container mx-auto px-4">
-        {/* Header avec écriture plus grande */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/5 text-primary text-sm font-medium mb-5 border border-primary/10">
-            <Music className="w-4 h-4" />
-            <span>Galerie d'émotions</span>
+    <section className="py-24 bg-white dark:bg-slate-900 relative">
+      {/* Background pattern */}
+      <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-30" />
+      
+      <div className="container mx-auto px-4 relative z-10">
+        {/* Header minimaliste */}
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-medium mb-4">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+            NOTRE GALERIE
           </div>
-          <h2 className="text-3xl md:text-4xl font-light text-foreground mb-3 tracking-tight">
-            Nos moments
-            <span className="font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent ml-2">
-              précieux
-            </span>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            Moments
+            <span className="text-blue-600"> précieux</span>
           </h2>
-          <div className="w-24 h-0.5 bg-gradient-to-r from-primary/0 via-primary to-primary/0 mx-auto" />
-          <p className="text-muted-foreground max-w-lg mx-auto mt-4 text-sm">
-            Un voyage à travers nos plus beaux souvenirs musicaux
+          <div className="w-16 h-0.5 bg-gradient-to-r from-blue-500 to-yellow-500 mx-auto mb-4" />
+          <p className="text-gray-500 text-sm">
+            Découvrez nos plus beaux souvenirs en images
           </p>
         </div>
 
-        {/* Contrôles plus grands */}
-        <div className="flex justify-center gap-3 mb-6">
+        {/* Navigation controls */}
+        <div className="flex justify-end gap-2 mb-6 max-w-6xl mx-auto">
           <button
             onClick={() => scroll('left')}
-            className="w-8 h-8 rounded-full border border-border bg-white/50 dark:bg-slate-800/50 hover:bg-primary hover:text-white text-muted-foreground flex items-center justify-center transition-all"
+            className="w-8 h-8 rounded-full border border-gray-200 hover:border-blue-500 hover:bg-blue-50 text-gray-400 hover:text-blue-600 flex items-center justify-center transition-all"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
-          
           <button
             onClick={() => setIsAutoPlaying(!isAutoPlaying)}
             className={`w-8 h-8 rounded-full border transition-all flex items-center justify-center ${
               isAutoPlaying 
-                ? "bg-primary text-white border-primary" 
-                : "bg-white/50 dark:bg-slate-800/50 border-border text-muted-foreground"
+                ? "border-blue-500 bg-blue-500 text-white" 
+                : "border-gray-200 text-gray-400 hover:border-blue-500 hover:text-blue-600"
             }`}
           >
             {isAutoPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
           </button>
-          
           <button
             onClick={() => scroll('right')}
-            className="w-8 h-8 rounded-full border border-border bg-white/50 dark:bg-slate-800/50 hover:bg-primary hover:text-white text-muted-foreground flex items-center justify-center transition-all"
+            className="w-8 h-8 rounded-full border border-gray-200 hover:border-blue-500 hover:bg-blue-50 text-gray-400 hover:text-blue-600 flex items-center justify-center transition-all"
           >
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Carrousel avec effet infini */}
-        <div className="relative group max-w-5xl mx-auto">
-          <button
-            onClick={() => scroll('left')}
-            className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-white/80 dark:bg-slate-800/80 shadow-md hover:bg-primary hover:text-white text-primary flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 backdrop-blur-sm"
-          >
-            <ChevronLeft className="w-3.5 h-3.5" />
-          </button>
-
+        {/* Carousel */}
+        <div className="relative max-w-6xl mx-auto">
           <div
             ref={scrollContainerRef}
             className="overflow-x-auto scrollbar-hide scroll-smooth"
@@ -274,99 +221,139 @@ export default function About() {
             onMouseLeave={() => setIsAutoPlaying(true)}
             onTouchStart={handleUserInteraction}
           >
-            <div className="flex gap-4 pb-5">
-              {duplicatedEvents.map((event, index) => (
-                <div
-                  key={`${event.id}-${index}`}
-                  className="flex-none w-60 group/card cursor-pointer"
-                  onClick={() => setSelectedImage(event)}
-                >
-                  <div className="relative rounded-xl overflow-hidden bg-white dark:bg-slate-900 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1">
-                    {/* Image */}
-                    <div className="aspect-[4/3] overflow-hidden bg-slate-100 dark:bg-slate-800 relative">
-                      {event.image_url ? (
-                        <img
-                          src={event.image_url}
-                          alt={event.titre}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/10 to-primary/5">
-                          <Music className="w-12 h-12 text-primary/30" />
+            <div className="flex gap-5 pb-4">
+              {duplicatedEvents.map((event, index) => {
+                const dateObj = formatDate(event.date);
+                const statusStyle = getStatusStyle(event.status);
+                const isHovered = hoveredCard === `${event.id}-${index}`;
+                
+                return (
+                  <div
+                    key={`${event.id}-${index}`}
+                    className="flex-none w-72 group"
+                    onMouseEnter={() => setHoveredCard(`${event.id}-${index}`)}
+                    onMouseLeave={() => setHoveredCard(null)}
+                  >
+                    <div className="relative bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
+                      {/* Date badge vertical */}
+                      <div className="absolute top-3 left-3 z-10 bg-white/90 backdrop-blur-sm rounded-lg px-2 py-1 text-center shadow-sm">
+                        <div className="text-lg font-bold text-blue-600 leading-tight">{dateObj.day}</div>
+                        <div className="text-[10px] font-medium text-gray-500 uppercase">{dateObj.month}</div>
+                      </div>
+
+                      {/* Image */}
+                      <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                        {event.image_url ? (
+                          <img
+                            src={event.image_url}
+                            alt={event.titre}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-yellow-50">
+                            <Music className="w-10 h-10 text-blue-300" />
+                          </div>
+                        )}
+                        
+                        {/* Status badge */}
+                        <div className={`absolute bottom-3 left-3 ${statusStyle.bg} text-white text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-sm`}>
+                          {statusStyle.text}
                         </div>
-                      )}
-                      {getStatusBadge(event.status)}
-                    </div>
-                    
-                    {/* Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300">
-                      <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
-                        <h3 className="font-medium text-sm mb-1 line-clamp-1">{event.titre}</h3>
-                        <div className="flex items-center gap-1.5 text-xs text-white/80">
-                          <Calendar className="w-3 h-3" />
-                          <span>{formatDate(event.date)}</span>
+
+                        {/* Overlay on hover */}
+                        <div className={`absolute inset-0 bg-blue-600/80 flex items-center justify-center gap-3 transition-all duration-300 ${
+                          isHovered ? 'opacity-100' : 'opacity-0'
+                        }`}>
+                          <button 
+                            onClick={() => setSelectedImage(event)}
+                            className="w-8 h-8 rounded-full bg-white text-blue-600 flex items-center justify-center hover:scale-110 transition"
+                          >
+                            <Eye className="w-3.5 h-3.5" />
+                          </button>
+                          <button className="w-8 h-8 rounded-full bg-white text-blue-600 flex items-center justify-center hover:scale-110 transition">
+                            <Heart className="w-3.5 h-3.5" />
+                          </button>
+                          <button className="w-8 h-8 rounded-full bg-white text-blue-600 flex items-center justify-center hover:scale-110 transition">
+                            <Share2 className="w-3.5 h-3.5" />
+                          </button>
                         </div>
+                      </div>
+
+                      {/* Content */}
+                      <div className="p-4">
+                        <h3 className="font-semibold text-gray-900 mb-1 line-clamp-1 text-sm">
+                          {event.titre}
+                        </h3>
+                        
+                        <div className="flex items-center gap-3 text-xs text-gray-500 mb-2">
+                          <div className="flex items-center gap-1">
+                            <Calendar className="w-3 h-3" />
+                            <span>{dateObj.full}</span>
+                          </div>
+                          {event.heure && (
+                            <div className="flex items-center gap-1">
+                              <Clock className="w-3 h-3" />
+                              <span>{event.heure}</span>
+                            </div>
+                          )}
+                        </div>
+
                         {event.place && (
-                          <div className="flex items-center gap-1.5 text-xs text-white/80 mt-1">
+                          <div className="flex items-center gap-1 text-xs text-gray-400">
                             <MapPin className="w-3 h-3" />
                             <span className="line-clamp-1">{event.place}</span>
                           </div>
                         )}
-                      </div>
-                    </div>
 
-                    {/* Informations */}
-                    <div className="p-3 border-t border-border/50">
-                      <h3 className="text-sm font-medium text-foreground mb-1 line-clamp-1">
-                        {event.titre}
-                      </h3>
-                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                        <Calendar className="w-3 h-3" />
-                        <span>{formatDate(event.date)}</span>
-                      </div>
-                      {event.place && (
-                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-0.5">
-                          <MapPin className="w-3 h-3" />
-                          <span className="line-clamp-1">{event.place}</span>
+                        {/* Progress bar on hover */}
+                        <div className="mt-3 h-0.5 bg-gray-100 rounded-full overflow-hidden">
+                          <div 
+                            className={`h-full bg-gradient-to-r from-blue-500 to-yellow-500 transition-all duration-500 ${
+                              isHovered ? 'w-full' : 'w-0'
+                            }`} 
+                          />
                         </div>
-                      )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
-
-          <button
-            onClick={() => scroll('right')}
-            className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-white/80 dark:bg-slate-800/80 shadow-md hover:bg-primary hover:text-white text-primary flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 backdrop-blur-sm"
-          >
-            <ChevronRight className="w-3.5 h-3.5" />
-          </button>
         </div>
 
-        {/* Indicateur */}
-        <div className="text-center mt-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-muted/50">
-            <div className={`w-1.5 h-1.5 rounded-full ${isAutoPlaying ? 'bg-primary animate-pulse' : 'bg-muted-foreground'}`} />
-            <span className="text-xs text-muted-foreground">
-              {isAutoPlaying ? 'Défilement infini' : 'Mode manuel'}
-            </span>
-            <div className="w-1 h-1 rounded-full bg-primary/30" />
-            <span className="text-xs text-muted-foreground">∞</span>
+        {/* Stats and CTA */}
+        <div className="max-w-6xl mx-auto mt-12 pt-8 border-t border-gray-100">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-6">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-blue-600">{events.length}</div>
+                <div className="text-xs text-gray-500">Événements</div>
+              </div>
+              <div className="w-px h-8 bg-gray-200" />
+              <div className="text-center">
+                <div className="text-2xl font-bold text-yellow-500">2024</div>
+                <div className="text-xs text-gray-500">Année</div>
+              </div>
+            </div>
+            
+            <Link
+              to="/galerie"
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-lg border border-blue-200 text-blue-600 hover:bg-blue-50 transition-all text-sm font-medium group"
+            >
+              <span>Voir toute la galerie</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition" />
+            </Link>
           </div>
         </div>
 
-        {/* CTA */}
-        <div className="text-center mt-10">
-          <Link
-            to="/galerie"
-            className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-primary/30 text-primary hover:bg-primary hover:text-white transition-all text-sm font-medium"
-          >
-            Explorer la galerie complète
-            <ArrowRight className="w-4 h-4" />
-          </Link>
+        {/* Auto-play indicator */}
+        <div className="text-center mt-6">
+          <div className="inline-flex items-center gap-2 text-[11px] text-gray-400">
+            <div className={`w-1.5 h-1.5 rounded-full ${isAutoPlaying ? 'bg-blue-500 animate-pulse' : 'bg-gray-300'}`} />
+            <span>{isAutoPlaying ? 'Défilement automatique' : 'Navigation manuelle'}</span>
+          </div>
         </div>
       </div>
 
@@ -377,7 +364,7 @@ export default function About() {
             id: selectedImage.id,
             image: selectedImage.image_url,
             title: selectedImage.titre,
-            date: formatDate(selectedImage.date),
+            date: formatDate(selectedImage.date).full,
             location: selectedImage.place,
             description: selectedImage.description
           }}
@@ -388,30 +375,6 @@ export default function About() {
       <style>{`
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
-        }
-        
-        @keyframes fade-in {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        
-        @keyframes scale-up {
-          from {
-            opacity: 0;
-            transform: scale(0.96);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
-        
-        .animate-fade-in {
-          animation: fade-in 0.2s ease-out;
-        }
-        
-        .animate-scale-up {
-          animation: scale-up 0.2s ease-out;
         }
         
         .line-clamp-1 {

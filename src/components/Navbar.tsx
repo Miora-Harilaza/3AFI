@@ -53,7 +53,7 @@ export default function Navbar() {
                   }}
                 >
                   <img 
-                    src="/logo.png" 
+                    src="/logo.jpeg" 
                     alt="STK 3AFI" 
                     className="w-8 h-8 object-contain p-1"
                     onError={(e) => {
@@ -77,7 +77,7 @@ export default function Navbar() {
                   STK 3AFI
                 </span>
                 <span className="text-[10px] font-medium text-yellow-500 dark:text-yellow-400 -mt-1">
-                  Chœur d'excellence
+                SAMPANA TANORA KRISTIANA
                 </span>
               </div>
               <Sparkles className="absolute -top-2 -right-6 w-4 h-4 text-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />

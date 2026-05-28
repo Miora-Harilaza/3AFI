@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Music, Mail, Phone, MapPin, Heart, ArrowUp } from "lucide-react";
+import { Music, Mail, Phone, MapPin, Heart, ArrowUp} from "lucide-react";
 import { useState, useEffect } from "react";
 
 export default function Footer() {
@@ -19,105 +19,75 @@ export default function Footer() {
 
   const currentYear = new Date().getFullYear();
 
-  // Réseaux sociaux sans les icônes lucide-react
-  const socialLinks = [
-    { 
-      name: "Facebook",
-      href: "https://web.facebook.com/profile.php?id=61586985007549", 
-      label: "Facebook", 
-      color: "#1877F2",
-      icon: "f"
-    },
-    
-   
-  ];
+  // Réseaux sociaux avec les vraies icônes
+
 
   return (
     <>
-      <footer className="relative bg-gradient-to-br from-gray-50 to-white dark:from-gray-950 dark:to-gray-900 border-t border-gray-200/50 dark:border-gray-800/50 mt-20">
-        {/* Décoration de fond */}
-        <div className="absolute inset-0 opacity-5 pointer-events-none">
-          <div className="absolute top-0 left-0 w-64 h-64 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full blur-3xl" />
+      <footer className="relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 border-t border-white/10 mt-20">
+        {/* Décoration de fond élégante */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=2070')] bg-cover bg-center opacity-5" />
+          <div className="absolute top-0 -left-4 w-72 h-72 bg-emerald-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-10 animate-blob" />
+          <div className="absolute top-0 -right-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-10 animate-blob animation-delay-2000" />
+          <div className="absolute -bottom-8 left-20 w-72 h-72 bg-teal-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-10 animate-blob animation-delay-4000" />
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
-          <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-            {/* Brand Section */}
+          <div className="py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+            {/* Brand Section - Style premium */}
             <div className="space-y-4">
               <div className="flex items-center gap-3 group">
                 <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur-md opacity-0 group-hover:opacity-50 transition-opacity duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl blur-md opacity-0 group-hover:opacity-50 transition-opacity duration-500" />
                   <div
-                    className="relative w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
+                    className="relative w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
                     style={{
-                      background: "linear-gradient(135deg, #8B5CF6, #EC4899)",
-                      boxShadow: "0 4px 15px rgba(139, 92, 246, 0.3)"
+                      background: "linear-gradient(135deg, #10B981, #14B8A6)",
+                      boxShadow: "0 8px 20px rgba(16, 185, 129, 0.3)"
                     }}
                   >
-                    <Music className="w-5 h-5 text-white" />
+                    <Music className="w-6 h-6 text-white" />
                   </div>
                 </div>
                 <div>
-                  <span className="font-display font-bold text-xl bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+                  <span className="font-display font-bold text-2xl bg-gradient-to-r from-white to-emerald-200 bg-clip-text text-transparent">
                     STK 3AFI
                   </span>
-                  
+                  <p className="text-xs text-emerald-300/60 mt-0.5">Arts & Musique</p>
                 </div>
               </div>
-              <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+              <p className="text-sm leading-relaxed text-gray-300 font-light">
                 Une association dédiée à l'art choral, à l'épanouissement musical et au partage de notre passion à travers des performances exceptionnelles.
               </p>
               <div className="flex gap-3 pt-2">
-                {socialLinks.map(({ name, href, label, color, icon }, i) => (
-                  <a
-                    key={i}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={label}
-                    className="w-10 h-10 rounded-xl flex items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-white transition-all duration-300 hover:scale-110 font-bold"
-                    style={{
-                      transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                      fontSize: "1.2rem"
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = color;
-                      e.currentTarget.style.color = "white";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = "";
-                      e.currentTarget.style.color = "";
-                    }}
-                  >
-                    {icon}
-                  </a>
-                ))}
+         
               </div>
             </div>
 
-            {/* Navigation Links - reste identique */}
+            {/* Navigation Links */}
             <div className="space-y-4">
-              <h4 className="font-display font-semibold text-sm uppercase tracking-wider text-gray-500 dark:text-gray-400 relative inline-block">
+              <h4 className="font-display font-semibold text-sm uppercase tracking-wider text-emerald-400 relative inline-block">
                 Navigation
-                <div className="absolute -bottom-1 left-0 w-8 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full" />
+                <div className="absolute -bottom-2 left-0 w-full h-0.5 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full" />
               </h4>
-              <nav className="flex flex-col gap-2">
+              <nav className="flex flex-col gap-3">
                 {[
                   { to: "/", label: "Accueil", icon: "✨" },
                   { to: "/membres", label: "Membres", icon: "👥" },
                   { to: "/evenements", label: "Événements", icon: "📅" },
                   { to: "/contact", label: "Contact", icon: "💌" },
+                  { to: "/galerie", label: "Galerie", icon: "🎨" },
                 ].map((l) => (
                   <Link
                     key={l.to}
                     to={l.to}
-                    className="group flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-all duration-300"
+                    className="group flex items-center gap-3 text-sm text-gray-300 hover:text-emerald-400 transition-all duration-300"
                   >
-                    <span className="text-base opacity-0 group-hover:opacity-100 transition-opacity duration-300 -ml-5 group-hover:ml-0">
+                    <span className="text-base opacity-0 group-hover:opacity-100 transition-all duration-300 -ml-6 group-hover:ml-0">
                       {l.icon}
                     </span>
-                    <span className="group-hover:translate-x-1 transition-transform duration-300">
+                    <span className="group-hover:translate-x-2 transition-transform duration-300">
                       {l.label}
                     </span>
                   </Link>
@@ -125,25 +95,25 @@ export default function Footer() {
               </nav>
             </div>
 
-            {/* Contact Info - reste identique */}
+            {/* Contact Info */}
             <div className="space-y-4">
-              <h4 className="font-display font-semibold text-sm uppercase tracking-wider text-gray-500 dark:text-gray-400 relative inline-block">
+              <h4 className="font-display font-semibold text-sm uppercase tracking-wider text-emerald-400 relative inline-block">
                 Contact
-                <div className="absolute -bottom-1 left-0 w-8 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full" />
+                <div className="absolute -bottom-2 left-0 w-full h-0.5 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full" />
               </h4>
               <div className="flex flex-col gap-4">
                 {[
-                  { Icon: Mail, text: "mioramh@gmail.com", href: "mailto:contact@stkantsomafi.org" },
-                  { Icon: Phone, text: "038 83 371 22", href: "tel:+261341234567" },
+                  { Icon: Mail, text: "contact@stk3afi.com", href: "mailto:contact@stk3afi.com" },
+                  { Icon: Phone, text: "+261 38 83 371 22", href: "tel:+261388337122" },
                   { Icon: MapPin, text: "Antsirabe, Madagascar" },
                 ].map(({ Icon, text, href }, i) => (
                   <a
                     key={i}
                     href={href}
-                    className="group flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-all duration-300"
+                    className="group flex items-center gap-3 text-sm text-gray-300 hover:text-emerald-400 transition-all duration-300"
                   >
-                    <div className="w-8 h-8 rounded-lg bg-purple-50 dark:bg-purple-900/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                      <Icon className="w-4 h-4 text-purple-500" />
+                    <div className="w-8 h-8 rounded-lg bg-emerald-500/10 backdrop-blur-sm border border-emerald-500/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-emerald-500/20 transition-all duration-300">
+                      <Icon className="w-4 h-4 text-emerald-400" />
                     </div>
                     <span className="group-hover:translate-x-1 transition-transform duration-300">
                       {text}
@@ -153,67 +123,92 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Newsletter Section - reste identique */}
+            {/* Newsletter Section */}
             <div className="space-y-4">
-              <h4 className="font-display font-semibold text-sm uppercase tracking-wider text-gray-500 dark:text-gray-400 relative inline-block">
+              <h4 className="font-display font-semibold text-sm uppercase tracking-wider text-emerald-400 relative inline-block">
                 Newsletter
-                <div className="absolute -bottom-1 left-0 w-8 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full" />
+                <div className="absolute -bottom-2 left-0 w-full h-0.5 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full" />
               </h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-gray-300 font-light">
                 Recevez nos actualités et concerts à venir
               </p>
               <div className="flex flex-col gap-3">
                 <input
                   type="email"
-                  placeholder="Votre email"
-                  className="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                  placeholder="Votre adresse email"
+                  className="px-4 py-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 text-white placeholder:text-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
                 />
                 <button
-                  className="px-4 py-2.5 rounded-xl font-medium text-sm text-white transition-all duration-300 hover:scale-105"
-                  style={{
-                    background: "linear-gradient(135deg, #8B5CF6, #EC4899)",
-                    boxShadow: "0 4px 15px rgba(139, 92, 246, 0.3)"
-                  }}
+                  className="group relative px-4 py-3 rounded-xl font-medium text-sm text-white transition-all duration-300 hover:scale-105 overflow-hidden"
                 >
-                  S'abonner
+                  <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-teal-500" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-teal-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl" />
+                  <span className="relative flex items-center justify-center gap-2">
+                    S'abonner
+                    <span className="group-hover:translate-x-1 transition-transform">→</span>
+                  </span>
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Bottom Bar */}
-          <div className="py-6 border-t border-gray-200 dark:border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-gray-500 dark:text-gray-400">
+          {/* Bottom Bar - Style élégant */}
+          <div className="py-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-xs text-gray-400 font-light">
               © {currentYear} STK 3AFI. Tous droits réservés.
             </p>
-            <div className="flex items-center gap-4">
-              <Link to="/mentions-legales" className="text-xs text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
+            <div className="flex items-center gap-6">
+              <Link to="/mentions-legales" className="text-xs text-gray-400 hover:text-emerald-400 transition-colors font-light">
                 Mentions légales
               </Link>
-              <span className="text-xs text-gray-300 dark:text-gray-600">|</span>
-              <Link to="/politique-confidentialite" className="text-xs text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
+              <span className="text-xs text-gray-600">•</span>
+              <Link to="/politique-confidentialite" className="text-xs text-gray-400 hover:text-emerald-400 transition-colors font-light">
                 Confidentialité
               </Link>
+              <span className="text-xs text-gray-600">•</span>
+              <Link to="/cgv" className="text-xs text-gray-400 hover:text-emerald-400 transition-colors font-light">
+                CGV
+              </Link>
             </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
-              Fait avec <Heart className="w-3 h-3 text-red-500 animate-pulse" /> pour la musique
+            <p className="text-xs text-gray-400 flex items-center gap-1 font-light">
+              Fait avec <Heart className="w-3 h-3 text-red-400 animate-pulse" /> pour la musique
             </p>
           </div>
         </div>
       </footer>
 
-      {/* Bouton retour en haut */}
+      {/* Bouton retour en haut - Style cohérent */}
       <button
         onClick={scrollToTop}
-        className={`fixed bottom-6 right-6 z-40 w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg transition-all duration-500 hover:scale-110 hover:shadow-xl ${
+        className={`fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25 transition-all duration-500 hover:scale-110 hover:shadow-xl hover:shadow-emerald-500/40 group ${
           showScrollTop
             ? "opacity-100 translate-y-0"
             : "opacity-0 translate-y-10 pointer-events-none"
         }`}
         aria-label="Retour en haut"
       >
-        <ArrowUp className="w-5 h-5 mx-auto" />
+        <ArrowUp className="w-5 h-5 mx-auto group-hover:-translate-y-0.5 transition-transform" />
       </button>
+
+      <style>{`
+        @keyframes blob {
+          0%, 100% { transform: translate(0px, 0px) scale(1); }
+          33% { transform: translate(30px, -50px) scale(1.1); }
+          66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        .animate-blob {
+          animation: blob 7s infinite;
+        }
+
+        .animation-delay-2000 {
+          animation-delay: 2s;
+        }
+
+        .animation-delay-4000 {
+          animation-delay: 4s;
+        }
+      `}</style>
     </>
   );
 }
