@@ -93,7 +93,7 @@ const AdminLayout = () => {
     { path: '/admin/events', icon: Calendar, label: 'Événements' },
      { path: '/admin/reunions', icon: Calendar, label: 'Réunions' },
     { path: '/admin/messages', icon: MessageSquare, label: 'Messages' },
-    { path: '/admin/settings', icon: Settings, label: 'Paramètres' },
+    /*{ path: '/admin/settings', icon: Settings, label: 'Paramètres' },*/
   ];
 
   const currentMenuItem = menuItems.find(item => location.pathname === item.path);

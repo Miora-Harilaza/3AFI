@@ -14,13 +14,14 @@ import {
   Loader2,
   CheckCheck,
   X,
+  Search,
 } from 'lucide-react';
 
 interface Message {
   id: string;
-  nom: string;           // Changé de 'name' à 'nom'
+  nom: string;
   email: string;
-  sujet: string;         // Changé de 'subject' à 'sujet'
+  sujet: string;
   message: string;
   status: string;
   created_at: string;
@@ -255,7 +256,7 @@ const AdminMessages = () => {
           <p className="text-gray-500 text-sm mt-1">Consultez et répondez aux messages du formulaire de contact</p>
         </div>
 
-        {/* Header Stats */}
+        {/* Stats Cards */}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
           <StatCard 
             title="Total messages" 
@@ -296,7 +297,7 @@ const AdminMessages = () => {
                 className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors text-sm"
               >
                 <FilterIcon className="w-4 h-4" />
-                <span>Filtres</span>
+                <span className="hidden sm:inline">Filtres</span>
               </button>
               <button
                 onClick={refreshData}
@@ -304,6 +305,7 @@ const AdminMessages = () => {
                 className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors text-sm"
               >
                 <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
+                <span className="hidden sm:inline">Actualiser</span>
               </button>
             </div>
           </div>
@@ -324,7 +326,7 @@ const AdminMessages = () => {
           )}
         </div>
 
-        {/* Bulk Actions Bar */}
+        {/* Bulk Actions */}
         {selectedMessages.length > 0 && (
           <div className="bg-blue-50 rounded-xl p-3 mb-4 flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="flex items-center gap-2">
@@ -374,71 +376,41 @@ const AdminMessages = () => {
           </div>
         ) : (
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            {/* Table Header */}
-            <div className="hidden lg:grid grid-cols-12 gap-3 px-4 py-3 bg-gray-50 border-b border-gray-200 text-xs font-medium text-gray-500 uppercase">
-              <div className="col-span-1 flex items-center">
-                <input
-                  type="checkbox"
-                  checked={selectedMessages.length === filteredMessages.length && filteredMessages.length > 0}
-                  onChange={selectAllMessages}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-              </div>
-              <div className="col-span-3">Expéditeur</div>
-              <div className="col-span-4">Sujet</div>
-              <div className="col-span-2">Statut</div>
-              <div className="col-span-2">Date</div>
-            </div>
-
-            {/* Messages */}
-            {filteredMessages.map((message) => (
-              <div
-                key={message.id}
-                className={`grid grid-cols-1 lg:grid-cols-12 gap-3 px-4 py-4 border-b border-gray-100 hover:bg-gray-50 transition-colors ${
-                  message.status === 'non_lu' || !message.status ? 'bg-blue-50/30' : ''
-                }`}
-              >
-                <div className="lg:col-span-1 flex items-start lg:items-center">
-                  <input
-                    type="checkbox"
-                    checked={selectedMessages.includes(message.id)}
-                    onChange={() => toggleSelectMessage(message.id)}
-                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mt-1 lg:mt-0"
-                  />
-                </div>
-                
-                <div className="lg:col-span-3">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-medium text-sm">
-                      {message.nom?.charAt(0).toUpperCase() || '?'}
+            {/* Messages List - Mobile/Tablette */}
+            <div className="block sm:hidden space-y-3 p-3">
+              {filteredMessages.map((message) => (
+                <div key={message.id} className="bg-white border border-gray-200 rounded-xl p-4">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={selectedMessages.includes(message.id)}
+                        onChange={() => toggleSelectMessage(message.id)}
+                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-medium">
+                        {message.nom?.charAt(0).toUpperCase() || '?'}
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-900">{message.nom || 'Anonyme'}</p>
+                        <p className="text-xs text-gray-500 break-all">{message.email}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="font-medium text-gray-900">{message.nom || 'Anonyme'}</p>
-                      <p className="text-xs text-gray-500 break-all">{message.email}</p>
-                    </div>
+                    {getStatusBadge(message.status || 'non_lu')}
                   </div>
-                </div>
-                
-                <div className="lg:col-span-4">
-                  <p className="font-medium text-gray-800 line-clamp-1">{message.sujet || 'Sans sujet'}</p>
-                  <p className="text-sm text-gray-500 line-clamp-2 mt-1">{message.message}</p>
-                </div>
-                
-                <div className="lg:col-span-2">
-                  {getStatusBadge(message.status || 'non_lu')}
-                </div>
-                
-                <div className="lg:col-span-2">
-                  <div className="flex flex-col items-start lg:items-end gap-2">
+                  <div className="mb-3">
+                    <p className="font-medium text-gray-800">{message.sujet || 'Sans sujet'}</p>
+                    <p className="text-sm text-gray-500 line-clamp-2 mt-1">{message.message}</p>
+                  </div>
+                  <div className="flex items-center justify-between">
                     <span className="text-xs text-gray-500">{formatDate(message.created_at)}</span>
-                    <div className="flex gap-1">
+                    <div className="flex gap-2">
                       <button
                         onClick={() => {
                           setSelectedMessage(message);
                           setShowViewModal(true);
                         }}
-                        className="p-1.5 text-blue-500 hover:bg-blue-50 rounded-lg transition"
-                        title="Voir"
+                        className="p-2 text-blue-500 hover:bg-blue-50 rounded-lg transition"
                       >
                         <Eye className="w-4 h-4" />
                       </button>
@@ -447,33 +419,122 @@ const AdminMessages = () => {
                           setSelectedMessage(message);
                           setShowReplyModal(true);
                         }}
-                        className="p-1.5 text-green-500 hover:bg-green-50 rounded-lg transition"
-                        title="Répondre"
+                        className="p-2 text-green-500 hover:bg-green-50 rounded-lg transition"
                       >
                         <Reply className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleDeleteMessage(message.id)}
-                        className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition"
-                        title="Supprimer"
+                        className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+
+            {/* Messages Table - Desktop */}
+            <div className="hidden sm:block overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50 border-b border-gray-200">
+                  <tr>
+                    <th className="w-12 px-4 py-3">
+                      <input
+                        type="checkbox"
+                        checked={selectedMessages.length === filteredMessages.length && filteredMessages.length > 0}
+                        onChange={selectAllMessages}
+                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                    </th>
+                    <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">Expéditeur</th>
+                    <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">Message</th>
+                    <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">Statut</th>
+                    <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">Date</th>
+                    <th className="w-24 px-4 py-3"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredMessages.map((message) => (
+                    <tr key={message.id} className={`border-b border-gray-100 hover:bg-gray-50 transition-colors ${
+                      message.status === 'non_lu' || !message.status ? 'bg-blue-50/30' : ''
+                    }`}>
+                      <td className="px-4 py-3">
+                        <input
+                          type="checkbox"
+                          checked={selectedMessages.includes(message.id)}
+                          onChange={() => toggleSelectMessage(message.id)}
+                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        />
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-medium text-sm">
+                            {message.nom?.charAt(0).toUpperCase() || '?'}
+                          </div>
+                          <div>
+                            <p className="font-medium text-gray-900">{message.nom || 'Anonyme'}</p>
+                            <p className="text-xs text-gray-500 break-all">{message.email}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">
+                        <p className="font-medium text-gray-800">{message.sujet || 'Sans sujet'}</p>
+                        <p className="text-sm text-gray-500 line-clamp-2">{message.message}</p>
+                      </td>
+                      <td className="px-4 py-3">
+                        {getStatusBadge(message.status || 'non_lu')}
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className="text-sm text-gray-500">{formatDate(message.created_at)}</span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex gap-1">
+                          <button
+                            onClick={() => {
+                              setSelectedMessage(message);
+                              setShowViewModal(true);
+                            }}
+                            className="p-1.5 text-blue-500 hover:bg-blue-50 rounded-lg transition"
+                            title="Voir"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => {
+                              setSelectedMessage(message);
+                              setShowReplyModal(true);
+                            }}
+                            className="p-1.5 text-green-500 hover:bg-green-50 rounded-lg transition"
+                            title="Répondre"
+                          >
+                            <Reply className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteMessage(message.id)}
+                            className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition"
+                            title="Supprimer"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </div>
 
-      {/* View Message Modal */}
+      {/* View Modal */}
       {showViewModal && selectedMessage && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-purple-600 px-4 sm:px-6 py-4 rounded-t-2xl flex justify-between items-center">
-              <h2 className="text-lg sm:text-xl font-bold text-white">Détail du message</h2>
+            <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4 rounded-t-2xl flex justify-between items-center">
+              <h2 className="text-xl font-bold text-white">Détail du message</h2>
               <button
                 onClick={() => {
                   setShowViewModal(false);
@@ -485,7 +546,7 @@ const AdminMessages = () => {
               </button>
             </div>
             
-            <div className="p-4 sm:p-6 space-y-4">
+            <div className="p-6 space-y-4">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-medium text-lg">
@@ -524,7 +585,7 @@ const AdminMessages = () => {
                 </div>
               )}
 
-              <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t">
+              <div className="flex justify-end gap-3 pt-4 border-t">
                 {selectedMessage.status !== 'repondu' && (
                   <button
                     onClick={() => {
@@ -554,8 +615,8 @@ const AdminMessages = () => {
       {showReplyModal && selectedMessage && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div className="sticky top-0 bg-gradient-to-r from-green-600 to-emerald-600 px-4 sm:px-6 py-4 rounded-t-2xl flex justify-between items-center">
-              <h2 className="text-lg sm:text-xl font-bold text-white">Répondre au message</h2>
+            <div className="sticky top-0 bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4 rounded-t-2xl flex justify-between items-center">
+              <h2 className="text-xl font-bold text-white">Répondre au message</h2>
               <button
                 onClick={() => {
                   setShowReplyModal(false);
@@ -568,7 +629,7 @@ const AdminMessages = () => {
               </button>
             </div>
             
-            <div className="p-4 sm:p-6 space-y-4">
+            <div className="p-6 space-y-4">
               <div className="bg-gray-50 rounded-xl p-4">
                 <p className="text-sm text-gray-600 mb-1">De: <span className="font-medium">{selectedMessage.nom}</span></p>
                 <p className="text-sm text-gray-600">Email: <span className="font-medium break-all">{selectedMessage.email}</span></p>
@@ -586,7 +647,7 @@ const AdminMessages = () => {
                 />
               </div>
               
-              <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t">
+              <div className="flex justify-end gap-3 pt-4 border-t">
                 <button
                   onClick={() => {
                     setShowReplyModal(false);
@@ -603,7 +664,7 @@ const AdminMessages = () => {
                   className="px-5 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition disabled:opacity-50 flex items-center gap-2"
                 >
                   {replying ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-                  {replying ? 'Envoi...' : 'Enregistrer la réponse'}
+                  {replying ? 'Envoi...' : 'Envoyer la réponse'}
                 </button>
               </div>
             </div>
@@ -634,28 +695,6 @@ const StatCard = ({ title, value, icon: Icon, color }: any) => {
         </div>
       </div>
     </div>
-  );
-};
-
-// Composant Search
-const Search = ({ className, ...props }: any) => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      {...props}
-    >
-      <circle cx="11" cy="11" r="8" />
-      <path d="m21 21-4.3-4.3" />
-    </svg>
   );
 };
 

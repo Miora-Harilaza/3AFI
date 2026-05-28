@@ -8,9 +8,9 @@ export default function Hero() {
   const [isAnimating, setIsAnimating] = useState(false);
   
   const images = [
-    { src: "/1.jpeg", alt: "STK Antsomafi background 1" },
-    { src: "/2.jpg", alt: "STK Antsomafi background 2" },
-    { src: "/3.jpg", alt: "STK Antsomafi background 3" }
+    { src: "/1.jpeg", alt: "STK 3afi background 1" },
+    { src: "/2.jpeg", alt: "STK 3afi background 2" },
+    { src: "/3.jpeg", alt: "STK 3afi background 3" }
   ];
 
   // Changement automatique des images
@@ -182,7 +182,7 @@ export default function Hero() {
                 animation: 'slideDown 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards'
               }}
             >
-              STK ANTSOMAFI
+              STK 3AFI
             </span>
             <br />
             <span 

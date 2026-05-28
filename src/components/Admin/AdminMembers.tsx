@@ -742,7 +742,7 @@ const AdminMembers = () => {
                         color: currentTheme.accent, 
                         letterSpacing: '1px' 
                       }}>
-                        STK ANTSOMAFI
+                        STK 3AFI
                       </div>
                       <div style={{ 
                         fontSize: '8px', 

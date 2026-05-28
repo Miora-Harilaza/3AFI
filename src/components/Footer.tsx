@@ -60,7 +60,7 @@ export default function Footer() {
                 </div>
                 <div>
                   <span className="font-display font-bold text-xl bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
-                    STK ANTSO MA FI
+                    STK 3AFI
                   </span>
                   
                 </div>
@@ -184,7 +184,7 @@ export default function Footer() {
           {/* Bottom Bar */}
           <div className="py-6 border-t border-gray-200 dark:border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              © {currentYear} STK ANTSO MA FI. Tous droits réservés.
+              © {currentYear} STK 3AFI. Tous droits réservés.
             </p>
             <div className="flex items-center gap-4">
               <Link to="/mentions-legales" className="text-xs text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">

@@ -147,7 +147,7 @@ const exportAsImage = async () => {
         <div style="text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 3px solid #e5e7eb;">
           <div style="font-size: 48px; margin-bottom: 10px;">📅</div>
           <h1 style="font-size: 28px; font-weight: bold; color: #1f2937; margin-bottom: 10px; margin: 0 0 10px 0;">
-          STK ANTSO MA FI
+          STK 3AFI
           </h1>
           <div style="color: #6b7280; font-size: 14px; margin-bottom: 5px;">
             TETI-ANDRO 2026 
@@ -408,7 +408,7 @@ const exportAsImage = async () => {
       <body>
         <div class="print-container">
           <div class="header">
-            <h1>📅STK ANTSOMAFI</h1>
+            <h1>📅STK 3AFI</h1>
             <div class="subtitle">TETI-ANDRO 2026</div>
             <div class="date">Généré le ${formattedDate} à ${formattedTime}</div>
           </div>

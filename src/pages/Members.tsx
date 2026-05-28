@@ -256,7 +256,7 @@ export default function Members() {
         <!DOCTYPE html>
         <html>
           <head>
-            <title>Feuille de présence mensuelle - STK AntsoMaFi</title>
+            <title>Feuille de présence mensuelle - STK 3AFI</title>
             <meta charset="UTF-8">
             <style>
               @page {
@@ -417,7 +417,7 @@ export default function Members() {
         <!DOCTYPE html>
         <html>
           <head>
-            <title>Feuille de présence - STK AntsoMaFi</title>
+            <title>Feuille de présence - STK 3AFI</title>
             <meta charset="UTF-8">
             <style>
               @page {
@@ -579,7 +579,7 @@ export default function Members() {
         <!DOCTYPE html>
         <html>
           <head>
-            <title>Liste des membres - STK AntsoMaFi</title>
+            <title>Liste des membres - STK 3AFI</title>
             <meta charset="UTF-8">
             <style>
               @page {
@@ -684,7 +684,7 @@ export default function Members() {
           </head>
           <body>
             <div class="header">
-              <h1>STK AntsoMaFi</h1>
+              <h1>STK 3AFI</h1>
               <div class="subtitle">Chorale Gospel - Liste des membres</div>
               <div class="date">
                 Généré le ${new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
@@ -733,7 +733,7 @@ export default function Members() {
             </div>
             
             <div class="footer">
-              Document officiel - STK AntsoMaFi
+              Document officiel - STK 3AFI
             </div>
             
             <script>
@@ -1017,7 +1017,7 @@ export default function Members() {
               <div ref={printRef} className="bg-white shadow-2xl mx-auto" style={{ width: '297mm', minHeight: '210mm', margin: '0 auto', padding: '15px' }}>
                 {/* En-tête */}
                 <div className="header">
-                  <h1>STK AntsoMaFi</h1>
+                  <h1>STK 3AFI</h1>
                   <div className="subtitle">Chorale Gospel - Feuille de présence</div>
                 </div>
 
@@ -1146,8 +1146,8 @@ export default function Members() {
               <div ref={adidyPrintRef} className="bg-white shadow-2xl mx-auto" style={{ width: '297mm', minHeight: '210mm', margin: '0 auto', padding: '12px' }}>
                 {/* En-tête */}
                 <div className="header">
-                  <h1>STK AntsoMaFi</h1>
-                  <div className="subtitle">STK ANTSOMAFI -  adidy isam-bolana</div>
+                  <h1>STK 3AFI</h1>
+                  <div className="subtitle">STK 3AFI -  adidy isam-bolana</div>
                   <div className="year">Année {selectedYear}</div>
                 </div>
 
